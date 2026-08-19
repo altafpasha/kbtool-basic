@@ -7,12 +7,12 @@ Ported from React + Tailwind to pure **HTML / Vanilla CSS / JS** and packaged wi
 
 ## Features
 
-- **Format IDs** — `loanId:count:id1,id2,…`
-- **Auto-mode** — convert on every keystroke / paste
-- **Auto-reset** — clear fields 5 s after copy
-- **Duplicate Detector** — warns when the same ID appears more than once
-- **Clipboard copy** — instant copy with toast notification
-- **Reset counter** — tracks how many times you've reset
+- **Format IDs** — `[loanId:]count:id1,id2,…`
+- **Button-driven flow** — clean, controlled formatting via **Convert & Copy** and **Reset** buttons
+- **Duplicate Detector** — alerts when duplicated IDs are present
+- **Instant Clipboard Copy** — copies to clipboard with toast notification & in-button feedback
+- **Quick Copy in Result Header** — dedicated copy button to re-copy formatted output
+- **Reset counter** — tracks conversion batch resets
 
 ---
 

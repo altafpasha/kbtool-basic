@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link rel="stylesheet" href="./style.css?v=1.1" />
+  <link rel="stylesheet" href="./style.css?v=1.2" />
 </head>
 <body>
 
@@ -17,6 +17,9 @@
   <div id="toast-container">
     <div id="toast-copied" class="toast toast-white" hidden>
       <i class="fas fa-check"></i> Copied to clipboard
+    </div>
+    <div id="toast-empty" class="toast toast-warning" hidden>
+      <i class="fas fa-circle-exclamation"></i> Please enter transaction IDs to format
     </div>
     <div id="toast-duplicate" class="toast toast-alert" hidden>
       <div class="toast-header">
@@ -38,7 +41,7 @@
           <div>
             <p class="step-label"><i class="fas fa-circle-dot"></i> KBTool</p>
             <h1 class="card-title">Transaction Formatter</h1>
-            <p class="card-subtitle">Paste IDs → auto formats, detects dupes &amp; copies instantly</p>
+            <p class="card-subtitle">Format transaction IDs, detect duplicates &amp; copy to clipboard</p>
           </div>
         </div>
         <span class="badge-new">Dupe Detector</span>
@@ -77,30 +80,21 @@
               id="ids-input"
               class="input-field input-textarea"
               placeholder="Paste or type IDs — comma or space separated…"
-              rows="4"
+              rows="5"
               spellcheck="false"
             ></textarea>
-          </div>
-
-          <!-- Toggles -->
-          <div class="toggles-row">
-            <label class="toggle-wrap" for="toggle-auto">
-              <input type="checkbox" id="toggle-auto" class="toggle-input" checked />
-              <span class="toggle-track"><span class="toggle-thumb"></span></span>
-              <span class="toggle-label" id="auto-label">Auto</span>
-            </label>
-            <label class="toggle-wrap" for="toggle-autoreset">
-              <input type="checkbox" id="toggle-autoreset" class="toggle-input" checked />
-              <span class="toggle-track"><span class="toggle-thumb"></span></span>
-              <span class="toggle-label">Auto-Reset</span>
-            </label>
           </div>
         </section>
 
         <!-- Right col: output + actions -->
         <section class="col-output">
-          <div class="section-label">
-            <i class="fas fa-terminal"></i> Result
+          <div class="section-label-row">
+            <div class="section-label">
+              <i class="fas fa-terminal"></i> Result
+            </div>
+            <button id="btn-copy-result" class="btn-copy-sm" title="Copy result to clipboard" disabled>
+              <i class="fas fa-copy"></i> Copy
+            </button>
           </div>
 
           <div id="output" class="output-box">
@@ -124,6 +118,6 @@
     </div>
   </main>
 
-  <script src="./app.js?v=1.1"></script>
+  <script src="./app.js?v=1.2"></script>
 </body>
 </html>

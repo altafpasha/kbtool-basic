@@ -1,32 +1,32 @@
 /* ============================================================
    KBTool — app.js
-   All logic ported from the React Transaction component
+   Button-driven transaction ID formatter and copier
    ============================================================ */
 
 (function () {
   'use strict';
 
   // ── DOM refs ────────────────────────────────────────────────
-  const loanIdInput     = document.getElementById('loan-id');
-  const idsInput        = document.getElementById('ids-input');
-  const outputBox       = document.getElementById('output');
-  const btnConvert      = document.getElementById('btn-convert');
-  const btnReset        = document.getElementById('btn-reset');
-  const resetCounter    = document.getElementById('reset-counter');
-  const toggleAuto      = document.getElementById('toggle-auto');
-  const toggleAutoReset = document.getElementById('toggle-autoreset');
-  const autoLabel       = document.getElementById('auto-label');
+  const loanIdInput   = document.getElementById('loan-id');
+  const idsInput      = document.getElementById('ids-input');
+  const outputBox     = document.getElementById('output');
+  const btnConvert    = document.getElementById('btn-convert');
+  const btnReset      = document.getElementById('btn-reset');
+  const btnCopyResult = document.getElementById('btn-copy-result');
+  const resetCounter  = document.getElementById('reset-counter');
 
   const toastCopied   = document.getElementById('toast-copied');
+  const toastEmpty    = document.getElementById('toast-empty');
   const toastDup      = document.getElementById('toast-duplicate');
   const toastDupIds   = document.getElementById('toast-dup-ids');
   const closeDupToast = document.getElementById('close-dup-toast');
 
   // ── State ───────────────────────────────────────────────────
-  let resetCount      = 0;
-  let copiedTimer     = null;
-  let dupTimer        = null;
-  let autoResetTimer  = null;
+  let currentResult = '';
+  let resetCount    = 0;
+  let copiedTimer   = null;
+  let emptyTimer    = null;
+  let dupTimer      = null;
 
   // ── Helpers ─────────────────────────────────────────────────
 
@@ -34,7 +34,12 @@
    * Parse raw input into an array of non-empty IDs.
    */
   function parseIds(raw) {
-    return raw.trim().split(/[,\s]+/).filter(id => id !== '');
+    if (!raw) return [];
+    return raw
+      .trim()
+      .split(/[,\s\n\r\t]+/)
+      .map(id => id.trim())
+      .filter(id => id.length > 0);
   }
 
   /**
@@ -52,23 +57,25 @@
 
   /**
    * Build formatted result string.
-   * Returns { result, duplicates }.
+   * Returns { result, duplicates, empty }.
    */
   function buildResult(rawIds, loanId) {
-    const arr  = parseIds(rawIds);
-    const dups = findDuplicates(arr);
+    const arr = parseIds(rawIds);
 
-    if (dups.length > 0) {
-      return { result: '', duplicates: dups };
+    if (arr.length === 0) {
+      return { result: '', duplicates: [], empty: true };
     }
 
-    if (arr.length === 0) return { result: '', duplicates: [] };
+    const dups = findDuplicates(arr);
+    if (dups.length > 0) {
+      return { result: '', duplicates: dups, empty: false };
+    }
 
     let formatted = `${arr.length}:${arr.join(',')}`;
-    if (loanId.trim()) {
+    if (loanId && loanId.trim()) {
       formatted = `${loanId.trim()}:${formatted}`;
     }
-    return { result: formatted, duplicates: [] };
+    return { result: formatted, duplicates: [], empty: false };
   }
 
   // ── Toast helpers ────────────────────────────────────────────
@@ -76,41 +83,72 @@
   function showCopiedToast() {
     if (copiedTimer) clearTimeout(copiedTimer);
 
-    // Toast
-    toastCopied.hidden = false;
+    // Show toast
+    if (toastCopied) toastCopied.hidden = false;
 
     // Button feedback
-    btnConvert.innerHTML = '<i class="fas fa-check"></i> Copied!';
-    btnConvert.classList.add('btn-copied');
+    if (btnConvert) {
+      btnConvert.innerHTML = '<i class="fas fa-check"></i> Copied!';
+      btnConvert.classList.add('btn-copied');
+    }
+    if (btnCopyResult) {
+      btnCopyResult.innerHTML = '<i class="fas fa-check"></i> Copied';
+      btnCopyResult.classList.add('btn-copied');
+    }
 
     copiedTimer = setTimeout(() => {
-      toastCopied.hidden = true;
-      btnConvert.innerHTML = '<i class="fas fa-copy"></i> Convert &amp; Copy <i class="fas fa-arrow-right btn-arrow"></i>';
-      btnConvert.classList.remove('btn-copied');
+      if (toastCopied) toastCopied.hidden = true;
+      if (btnConvert) {
+        btnConvert.innerHTML = '<i class="fas fa-copy"></i> Convert &amp; Copy <i class="fas fa-arrow-right btn-arrow"></i>';
+        btnConvert.classList.remove('btn-copied');
+      }
+      if (btnCopyResult) {
+        btnCopyResult.innerHTML = '<i class="fas fa-copy"></i> Copy';
+        btnCopyResult.classList.remove('btn-copied');
+      }
     }, 2000);
+  }
+
+  function showEmptyToast() {
+    if (emptyTimer) clearTimeout(emptyTimer);
+    if (toastEmpty) {
+      toastEmpty.hidden = false;
+      emptyTimer = setTimeout(() => {
+        toastEmpty.hidden = true;
+      }, 3000);
+    }
   }
 
   function showDuplicateToast(dups) {
     if (dupTimer) clearTimeout(dupTimer);
-    toastDupIds.textContent = 'Duplicates: ' + dups.join(', ');
-    toastDup.hidden = false;
-    dupTimer = setTimeout(() => { toastDup.hidden = true; }, 5000);
+    if (toastDup && toastDupIds) {
+      toastDupIds.textContent = 'Duplicates: ' + dups.join(', ');
+      toastDup.hidden = false;
+      dupTimer = setTimeout(() => {
+        toastDup.hidden = true;
+      }, 5000);
+    }
   }
 
-  closeDupToast.addEventListener('click', () => {
-    toastDup.hidden = true;
-    if (dupTimer) clearTimeout(dupTimer);
-  });
+  if (closeDupToast && toastDup) {
+    closeDupToast.addEventListener('click', () => {
+      toastDup.hidden = true;
+      if (dupTimer) clearTimeout(dupTimer);
+    });
+  }
 
   // ── Output rendering ─────────────────────────────────────────
 
   function renderOutput(value) {
+    currentResult = value || '';
     if (value) {
       outputBox.classList.add('has-value');
       outputBox.textContent = value;
+      if (btnCopyResult) btnCopyResult.disabled = false;
     } else {
       outputBox.classList.remove('has-value');
       outputBox.innerHTML = '<span class="output-placeholder">Result will appear here…</span>';
+      if (btnCopyResult) btnCopyResult.disabled = true;
     }
   }
 
@@ -118,32 +156,44 @@
 
   function copyToClipboard(text) {
     if (!text) return;
-    navigator.clipboard.writeText(text)
-      .then(showCopiedToast)
-      .catch(() => {
-        // Fallback for older browsers / non-secure contexts
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.opacity  = '0';
-        document.body.appendChild(ta);
-        ta.focus();
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
-        showCopiedToast();
-      });
 
-    if (toggleAutoReset.checked) {
-      if (autoResetTimer) clearTimeout(autoResetTimer);
-      autoResetTimer = setTimeout(resetFields, 5000);
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text)
+        .then(showCopiedToast)
+        .catch(() => fallbackCopy(text));
+    } else {
+      fallbackCopy(text);
+    }
+  }
+
+  function fallbackCopy(text) {
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      const successful = document.execCommand('copy');
+      document.body.removeChild(ta);
+      if (successful) showCopiedToast();
+    } catch (err) {
+      console.error('Fallback copy failed: ', err);
     }
   }
 
   // ── Core action ──────────────────────────────────────────────
 
   function convertAndCopy() {
-    const { result, duplicates } = buildResult(idsInput.value, loanIdInput.value);
+    const { result, duplicates, empty } = buildResult(idsInput.value, loanIdInput.value);
+
+    if (empty) {
+      showEmptyToast();
+      idsInput.focus();
+      return;
+    }
 
     if (duplicates.length > 0) {
       showDuplicateToast(duplicates);
@@ -162,48 +212,41 @@
     idsInput.value    = '';
     renderOutput('');
     resetCount++;
-    resetCounter.textContent = resetCount;
+    if (resetCounter) resetCounter.textContent = resetCount;
+    idsInput.focus();
   }
 
   // ── Event listeners ──────────────────────────────────────────
 
-  btnConvert.addEventListener('click', convertAndCopy);
+  if (btnConvert) {
+    btnConvert.addEventListener('click', convertAndCopy);
+  }
 
-  btnReset.addEventListener('click', resetFields);
+  if (btnReset) {
+    btnReset.addEventListener('click', resetFields);
+  }
 
-  // Auto-label update
-  toggleAuto.addEventListener('change', () => {
-    autoLabel.textContent = toggleAuto.checked ? 'Auto' : 'Manual';
-  });
+  if (btnCopyResult) {
+    btnCopyResult.addEventListener('click', () => {
+      if (currentResult) {
+        copyToClipboard(currentResult);
+      }
+    });
+  }
 
-  // Auto-mode: convert on input
-  idsInput.addEventListener('input', () => {
-    if (toggleAuto.checked) convertAndCopy();
-  });
-
-  // Auto-mode: convert on paste
-  idsInput.addEventListener('paste', (e) => {
-    if (!toggleAuto.checked) return;
-    e.preventDefault();
-    const pasted = e.clipboardData.getData('text');
-    idsInput.value = pasted;
-    convertAndCopy();
-  });
-
-  // Auto-mode: convert on loan ID change
-  loanIdInput.addEventListener('input', () => {
-    if (toggleAuto.checked && idsInput.value.trim()) convertAndCopy();
-  });
-
-  // Enter key trigger
+  // Keyboard shortcut: Ctrl+Enter or Cmd+Enter to convert & copy
   idsInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
       e.preventDefault();
       convertAndCopy();
     }
   });
+
   loanIdInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') convertAndCopy();
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      idsInput.focus();
+    }
   });
 
 })();

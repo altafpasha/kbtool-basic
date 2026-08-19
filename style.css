@@ -76,6 +76,15 @@ body {
   border: 1px solid rgba(239,68,68,0.40);
   color: rgba(255,210,210,0.95);
 }
+.toast-warning {
+  background: var(--card2);
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  color: rgba(254, 243, 199, 0.95);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.2), 0 8px 32px rgba(0,0,0,0.6);
+}
 .toast-header { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; margin-bottom: 0.2rem; }
 .toast-close {
   margin-left: auto; background: none; border: none;
@@ -189,6 +198,12 @@ body {
 }
 
 /* ── Section labels ──────────────────────────────────────── */
+.section-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
 .section-label {
   font-size: 0.62rem; font-weight: 700;
   color: var(--text-2);
@@ -196,7 +211,39 @@ body {
   display: flex; align-items: center; gap: 0.35rem;
   margin-bottom: 0.75rem;
 }
+.section-label-row .section-label {
+  margin-bottom: 0;
+}
 .section-label i { font-size: 0.55rem; }
+
+.btn-copy-sm {
+  background: var(--card2);
+  border: 1px solid var(--border);
+  color: var(--text-2);
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.22rem 0.65rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all var(--dur) var(--ease);
+}
+.btn-copy-sm:hover:not(:disabled) {
+  border-color: var(--orange-border);
+  color: var(--orange);
+  background: var(--orange-dim);
+}
+.btn-copy-sm:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.btn-copy-sm.btn-copied {
+  border-color: var(--orange-border);
+  color: var(--orange);
+  background: var(--orange-dim);
+}
 
 /* ── Inputs Column ───────────────────────────────────────── */
 .col-inputs {
@@ -229,43 +276,8 @@ body {
 }
 .input-textarea {
   line-height: 1.5;
-  min-height: 6rem;
+  min-height: 7.8rem;
 }
-
-/* Toggles */
-.toggles-row {
-  display: flex; align-items: center; gap: 0.875rem;
-  padding-top: 0.15rem;
-}
-.toggle-wrap {
-  display: inline-flex; align-items: center; gap: 0.45rem;
-  cursor: pointer; user-select: none;
-}
-.toggle-input { display: none; }
-.toggle-track {
-  position: relative; width: 2.5rem; height: 1.35rem;
-  background: var(--inset); border: 1px solid var(--border);
-  border-radius: var(--radius-pill); flex-shrink: 0;
-  transition: background var(--dur) var(--ease), border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
-}
-.toggle-thumb {
-  position: absolute; top: 2px; left: 2px;
-  width: 0.95rem; height: 0.95rem;
-  background: rgba(255,255,255,0.22); border-radius: 50%;
-  transition: transform var(--dur) var(--ease), background var(--dur) var(--ease);
-}
-.toggle-input:checked + .toggle-track {
-  background: var(--orange-dim); border-color: var(--orange-border);
-  box-shadow: 0 0 10px var(--orange-glow);
-}
-.toggle-input:checked + .toggle-track .toggle-thumb {
-  transform: translateX(1.15rem); background: var(--orange);
-}
-.toggle-label {
-  font-size: 0.72rem; font-weight: 500; color: var(--text-2);
-  transition: color var(--dur) var(--ease);
-}
-.toggle-wrap:hover .toggle-label { color: var(--text-1); }
 
 /* ── Output Column ───────────────────────────────────────── */
 .col-output {
@@ -356,5 +368,4 @@ body {
   .card { padding: 1.25rem 1rem; }
   .card-title { font-size: 1.2rem; }
   .btn { font-size: 0.78rem; padding: 0.55rem 1rem; }
-  .toggles-row { flex-wrap: wrap; gap: 0.65rem; }
 }
