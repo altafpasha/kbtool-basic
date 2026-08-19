@@ -1,0 +1,23 @@
+# ─────────────────────────────────────────────────────────────
+# KBTool — docker-compose.yml
+# ─────────────────────────────────────────────────────────────
+
+services:
+  kbtool:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: kbtool:latest
+    container_name: kbtool-app
+    ports:
+      - "8080:80"        # Access at http://localhost:8080
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    labels:
+      - "com.kbtool.description=Transaction ID Formatter"
+      - "com.kbtool.version=1.0.0"

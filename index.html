@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KBTool — Transaction ID Formatter</title>
+  <meta name="description" content="Instantly format and copy transaction IDs with optional loan ID prefix. Features auto-mode, auto-reset, and duplicate detection." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Toast container -->
+  <div id="toast-container">
+    <div id="toast-copied" class="toast toast-white" hidden>
+      <i class="fas fa-check"></i> Copied to clipboard
+    </div>
+    <div id="toast-duplicate" class="toast toast-alert" hidden>
+      <div class="toast-header">
+        <i class="fas fa-exclamation"></i>
+        <strong>Duplicate IDs detected</strong>
+        <button id="close-dup-toast" class="toast-close">×</button>
+      </div>
+      <p id="toast-dup-ids" class="toast-body"></p>
+    </div>
+  </div>
+
+  <!-- Main card -->
+  <main class="container">
+    <div class="card">
+
+      <!-- Header -->
+      <header class="card-header">
+        <div class="header-left">
+          <div class="logo-icon">
+            <i class="fas fa-bolt"></i>
+          </div>
+          <div>
+            <h1 class="card-title">Transaction Formatter</h1>
+            <p class="card-subtitle">Format &amp; copy transaction IDs instantly</p>
+          </div>
+        </div>
+        <span class="badge-new">Dupe Detector</span>
+      </header>
+
+      <div class="divider"></div>
+
+      <!-- Inputs -->
+      <section class="inputs-section">
+        <div class="input-group">
+          <label class="input-label" for="loan-id">
+            <i class="fas fa-tag"></i> Loan / QID
+          </label>
+          <input
+            id="loan-id"
+            type="text"
+            class="input-field input-short"
+            placeholder="e.g. QID 106"
+            autocomplete="off"
+            spellcheck="false"
+          />
+        </div>
+
+        <div class="input-group">
+          <label class="input-label" for="ids-input">
+            <i class="fas fa-list-ol"></i> Transaction IDs
+          </label>
+          <textarea
+            id="ids-input"
+            class="input-field input-textarea"
+            placeholder="Paste or type IDs — comma or space separated…"
+            rows="3"
+            spellcheck="false"
+          ></textarea>
+        </div>
+      </section>
+
+      <!-- Controls -->
+      <section class="controls-section">
+        <button id="btn-convert" class="btn btn-primary" title="Convert & Copy (Enter)">
+          <i class="fas fa-copy"></i> Convert &amp; Copy
+        </button>
+        <button id="btn-reset" class="btn btn-ghost" title="Reset all fields">
+          <i class="fas fa-rotate-left"></i> Reset
+          <span id="reset-counter" class="counter-badge">0</span>
+        </button>
+
+        <label class="toggle-wrap" for="toggle-auto" title="Auto-convert on input">
+          <input type="checkbox" id="toggle-auto" class="toggle-input" checked />
+          <span class="toggle-track"><span class="toggle-thumb"></span></span>
+          <span class="toggle-label" id="auto-label">Auto</span>
+        </label>
+
+        <label class="toggle-wrap" for="toggle-autoreset" title="Auto-reset 5 s after copy">
+          <input type="checkbox" id="toggle-autoreset" class="toggle-input" checked />
+          <span class="toggle-track"><span class="toggle-thumb"></span></span>
+          <span class="toggle-label">Auto-Reset</span>
+        </label>
+      </section>
+
+      <!-- Output -->
+      <section class="output-section">
+        <div class="output-label">
+          <i class="fas fa-terminal"></i> Output
+        </div>
+        <div id="output" class="output-box">
+          <span class="output-placeholder">Result will appear here…</span>
+        </div>
+      </section>
+
+      <div class="card-glow-bottom"></div>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
