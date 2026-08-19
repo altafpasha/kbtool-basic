@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>KBTool — Transaction ID Formatter</title>
-  <meta name="description" content="Instantly format and copy transaction IDs with optional loan ID prefix. Features auto-mode, auto-reset, and duplicate detection." />
+  <meta name="description" content="Instantly format and copy transaction IDs with optional loan ID prefix." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
@@ -20,7 +20,7 @@
     </div>
     <div id="toast-duplicate" class="toast toast-alert" hidden>
       <div class="toast-header">
-        <i class="fas fa-exclamation"></i>
+        <i class="fas fa-exclamation-triangle"></i>
         <strong>Duplicate IDs detected</strong>
         <button id="close-dup-toast" class="toast-close">×</button>
       </div>
@@ -28,22 +28,15 @@
     </div>
   </div>
 
-  <!-- Main card -->
   <main class="container">
     <div class="card">
 
-      <!-- Header -->
+      <!-- Header — reference-style step label + large title -->
       <header class="card-header">
-        <div class="header-left">
-          <div class="logo-icon">
-            <i class="fas fa-bolt"></i>
-          </div>
-          <div>
-            <h1 class="card-title">Transaction Formatter</h1>
-            <p class="card-subtitle">Format &amp; copy transaction IDs instantly</p>
-          </div>
-        </div>
         <span class="badge-new">Dupe Detector</span>
+        <p class="step-label"><i class="fas fa-bolt"></i> KBTool</p>
+        <h1 class="card-title">Transaction<br>Formatter</h1>
+        <p class="card-subtitle">Format &amp; copy transaction IDs instantly</p>
       </header>
 
       <div class="divider"></div>
@@ -52,7 +45,7 @@
       <section class="inputs-section">
         <div class="input-group">
           <label class="input-label" for="loan-id">
-            <i class="fas fa-tag"></i> Loan / QID
+            <i class="fas fa-tag"></i> Loan / QID prefix
           </label>
           <input
             id="loan-id"
@@ -80,10 +73,10 @@
 
       <!-- Controls -->
       <section class="controls-section">
-        <button id="btn-convert" class="btn btn-primary" title="Convert & Copy (Enter)">
+        <button id="btn-convert" class="btn btn-primary">
           <i class="fas fa-copy"></i> Convert &amp; Copy
         </button>
-        <button id="btn-reset" class="btn btn-ghost" title="Reset all fields">
+        <button id="btn-reset" class="btn btn-ghost">
           <i class="fas fa-rotate-left"></i> Reset
           <span id="reset-counter" class="counter-badge">0</span>
         </button>
