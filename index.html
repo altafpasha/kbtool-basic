@@ -31,78 +31,94 @@
   <main class="container">
     <div class="card">
 
-      <!-- Header — reference-style step label + large title -->
+      <!-- ── Header ── -->
       <header class="card-header">
+        <div class="header-left">
+          <div class="logo-mark"><i class="fas fa-bolt"></i></div>
+          <div>
+            <p class="step-label"><i class="fas fa-circle-dot"></i> KBTool</p>
+            <h1 class="card-title">Transaction Formatter</h1>
+            <p class="card-subtitle">Paste IDs → auto formats, detects dupes &amp; copies instantly</p>
+          </div>
+        </div>
         <span class="badge-new">Dupe Detector</span>
-        <p class="step-label"><i class="fas fa-bolt"></i> KBTool</p>
-        <h1 class="card-title">Transaction<br>Formatter</h1>
-        <p class="card-subtitle">Format &amp; copy transaction IDs instantly</p>
       </header>
 
       <div class="divider"></div>
 
-      <!-- Inputs -->
-      <section class="inputs-section">
-        <div class="input-group">
-          <label class="input-label" for="loan-id">
-            <i class="fas fa-tag"></i> Loan / QID prefix
-          </label>
-          <input
-            id="loan-id"
-            type="text"
-            class="input-field input-short"
-            placeholder="e.g. QID 106"
-            autocomplete="off"
-            spellcheck="false"
-          />
-        </div>
+      <!-- ── Body: two columns on wide screens ── -->
+      <div class="card-body">
 
-        <div class="input-group">
-          <label class="input-label" for="ids-input">
-            <i class="fas fa-list-ol"></i> Transaction IDs
-          </label>
-          <textarea
-            id="ids-input"
-            class="input-field input-textarea"
-            placeholder="Paste or type IDs — comma or space separated…"
-            rows="3"
-            spellcheck="false"
-          ></textarea>
-        </div>
-      </section>
+        <!-- Left col: inputs -->
+        <section class="col-inputs">
+          <div class="section-label">
+            <i class="fas fa-keyboard"></i> Inputs
+          </div>
 
-      <!-- Controls -->
-      <section class="controls-section">
-        <button id="btn-convert" class="btn btn-primary">
-          <i class="fas fa-copy"></i> Convert &amp; Copy
-        </button>
-        <button id="btn-reset" class="btn btn-ghost">
-          <i class="fas fa-rotate-left"></i> Reset
-          <span id="reset-counter" class="counter-badge">0</span>
-        </button>
+          <div class="input-group">
+            <label class="input-label" for="loan-id">
+              <i class="fas fa-tag"></i> Loan / QID prefix
+            </label>
+            <input
+              id="loan-id"
+              type="text"
+              class="input-field"
+              placeholder="e.g. QID 106"
+              autocomplete="off"
+              spellcheck="false"
+            />
+          </div>
 
-        <label class="toggle-wrap" for="toggle-auto" title="Auto-convert on input">
-          <input type="checkbox" id="toggle-auto" class="toggle-input" checked />
-          <span class="toggle-track"><span class="toggle-thumb"></span></span>
-          <span class="toggle-label" id="auto-label">Auto</span>
-        </label>
+          <div class="input-group">
+            <label class="input-label" for="ids-input">
+              <i class="fas fa-list-ol"></i> Transaction IDs
+            </label>
+            <textarea
+              id="ids-input"
+              class="input-field input-textarea"
+              placeholder="Paste or type IDs — comma or space separated…"
+              rows="4"
+              spellcheck="false"
+            ></textarea>
+          </div>
 
-        <label class="toggle-wrap" for="toggle-autoreset" title="Auto-reset 5 s after copy">
-          <input type="checkbox" id="toggle-autoreset" class="toggle-input" checked />
-          <span class="toggle-track"><span class="toggle-thumb"></span></span>
-          <span class="toggle-label">Auto-Reset</span>
-        </label>
-      </section>
+          <!-- Toggles -->
+          <div class="toggles-row">
+            <label class="toggle-wrap" for="toggle-auto">
+              <input type="checkbox" id="toggle-auto" class="toggle-input" checked />
+              <span class="toggle-track"><span class="toggle-thumb"></span></span>
+              <span class="toggle-label" id="auto-label">Auto</span>
+            </label>
+            <label class="toggle-wrap" for="toggle-autoreset">
+              <input type="checkbox" id="toggle-autoreset" class="toggle-input" checked />
+              <span class="toggle-track"><span class="toggle-thumb"></span></span>
+              <span class="toggle-label">Auto-Reset</span>
+            </label>
+          </div>
+        </section>
 
-      <!-- Output -->
-      <section class="output-section">
-        <div class="output-label">
-          <i class="fas fa-terminal"></i> Output
-        </div>
-        <div id="output" class="output-box">
-          <span class="output-placeholder">Result will appear here…</span>
-        </div>
-      </section>
+        <!-- Right col: output + actions -->
+        <section class="col-output">
+          <div class="section-label">
+            <i class="fas fa-terminal"></i> Result
+          </div>
+
+          <div id="output" class="output-box">
+            <span class="output-placeholder">Result will appear here…</span>
+          </div>
+
+          <div class="action-row">
+            <button id="btn-convert" class="btn btn-primary">
+              <i class="fas fa-copy"></i> Convert &amp; Copy
+              <i class="fas fa-arrow-right btn-arrow"></i>
+            </button>
+            <button id="btn-reset" class="btn btn-ghost">
+              <i class="fas fa-rotate-left"></i> Reset
+              <span id="reset-counter" class="counter-badge">0</span>
+            </button>
+          </div>
+        </section>
+      </div>
 
       <div class="card-glow-bottom"></div>
     </div>

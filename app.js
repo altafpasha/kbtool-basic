@@ -85,7 +85,7 @@
 
     copiedTimer = setTimeout(() => {
       toastCopied.hidden = true;
-      btnConvert.innerHTML = '<i class="fas fa-copy"></i> Convert &amp; Copy';
+      btnConvert.innerHTML = '<i class="fas fa-copy"></i> Convert &amp; Copy <i class="fas fa-arrow-right btn-arrow"></i>';
       btnConvert.classList.remove('btn-copied');
     }, 2000);
   }
@@ -110,7 +110,7 @@
       outputBox.textContent = value;
     } else {
       outputBox.classList.remove('has-value');
-      outputBox.innerHTML = '<span class="output-placeholder">Result will be displayed here…</span>';
+      outputBox.innerHTML = '<span class="output-placeholder">Result will appear here…</span>';
     }
   }
 
@@ -176,7 +176,7 @@
     autoLabel.textContent = toggleAuto.checked ? 'Auto' : 'Manual';
   });
 
-  // Auto-mode: convert on every keystroke
+  // Auto-mode: convert on input
   idsInput.addEventListener('input', () => {
     if (toggleAuto.checked) convertAndCopy();
   });
